@@ -1,0 +1,113 @@
+import { FC, useState } from "react";
+import { 
+    AppBar, 
+    Box, 
+    Button, 
+    Container, 
+    Toolbar, 
+    Typography,
+    IconButton,
+    Menu,
+    MenuItem,
+} from "@mui/material";
+import Link from "next/link";
+import { useAppSelector } from "../../../store/hook";
+import { AccountCircle } from "@mui/icons-material";
+
+const Header: FC = () => {
+
+    const {
+        auth,
+    } = useAppSelector(state => ({
+        auth: state.auth,
+    }))
+
+    const [anchorEl, setAnchorEl] = useState<any>(null)
+
+    const handleMenu = (event: any) => {
+        setAnchorEl(event.currentTarget)
+    }
+
+    const handleClose = () => {
+        setAnchorEl(null)
+    }
+
+
+    return (
+        <AppBar position="static">
+            <Container maxWidth="xl">
+                <Toolbar disableGutters>
+                    <Typography
+                        variant="h6"
+                        noWrap
+                        component="div"
+                        sx={{mr: 2, display: { xs: 'none', md: 'flex'}}}
+                    >
+                        <Link href="/">
+                            LOGO
+                        </Link>
+                    </Typography>
+                    {/* <Box sx={{ flexGrow: 1, display: { sx: 'flex', }}}>
+
+                    </Box> */}
+                    <Box sx={{ flexGrow: 1, display: { sx: 'flex', md: 'flex'}}}>
+                        <Link href="/test" passHref>
+                            <Button
+                                sx={{ my: 2, color: 'white', display: 'block' }}
+                            >
+                                Testing
+                            </Button>
+                        </Link>
+                    </Box>
+                    {
+                        auth.user
+                        ? (
+                            <div>
+                                <IconButton
+                                    size="large"
+                                    aria-label="account of current user"
+                                    aria-controls="menu-appbar"
+                                    aria-haspopup="true"
+                                    onClick={handleMenu}
+                                    color="inherit"
+                                >
+                                <AccountCircle />
+                                </IconButton>
+                                <Menu
+                                    id="menu-appbar"
+                                    anchorEl={anchorEl}
+                                    anchorOrigin={{
+                                        vertical: 'top',
+                                        horizontal: 'right',
+                                    }}
+                                    keepMounted
+                                    transformOrigin={{
+                                        vertical: 'top',
+                                        horizontal: 'right',
+                                    }}
+                                    open={Boolean(anchorEl)}
+                                    onClose={handleClose}
+                                >
+                                    <MenuItem onClick={handleClose}>Profile</MenuItem>
+                                    <MenuItem onClick={handleClose}>My account</MenuItem>
+                                </Menu>
+                            </div>
+                        )
+                        : (
+                            <>
+                                <Link href="/auth/login" passHref>
+                                    <Button color="inherit">Login</Button>
+                                </Link>
+                                <Link href="/auth/register" passHref>
+                                    <Button color="inherit">sign up</Button>
+                                </Link>
+                            </>
+                        )
+                    }
+                </Toolbar>
+            </Container>
+        </AppBar>
+    )
+}
+
+export default Header
