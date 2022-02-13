@@ -46,6 +46,16 @@ const authThunks = {
 
             }
         }
+    ),
+    getCurrentUser: createAsyncThunk(
+        'auth/getCurrentUserr',
+        async () => {
+            try {
+                return auth.currentUser
+            } catch (error: any) {
+
+            }
+        }
     )
 }
 

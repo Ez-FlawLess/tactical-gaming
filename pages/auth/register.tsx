@@ -1,4 +1,4 @@
-import { NextPage } from "next";
+import { GetStaticProps, NextPage } from "next";
 import { useFormik } from 'formik'
 import * as yup from 'yup'
 import { Box, Button, Grid, TextField } from "@mui/material";
@@ -103,6 +103,14 @@ const Register: NextPage = () => {
             </form>
         </Box>
     )
+}
+
+export const getStaticProps: GetStaticProps = async () => {
+    return {
+      props: {
+          nonAuth: true,
+      },
+    }
 }
 
 export default Register

@@ -4,13 +4,19 @@ import Layout from '../components/layout/Layout'
 
 import { Provider } from 'react-redux'
 import { store } from '../store'
-import { auth } from '../firebase'
+import { app, auth } from '../firebase'
+import AuthController from '../components/auth/AuthController'
+import AuthGuard from '../components/auth/AuthGuard'
 
 function MyApp({ Component, pageProps }: AppProps) {
+
   return (
     <Provider store={store}>
+      <AuthController />
       <Layout>
-        <Component {...pageProps} />
+        <AuthGuard pageProps={pageProps}>
+          <Component {...pageProps} />
+        </AuthGuard>
       </Layout>
     </Provider>
   )

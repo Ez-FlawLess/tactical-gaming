@@ -1,4 +1,4 @@
-import { FC, useState } from "react";
+import { FC, useEffect, useState } from "react";
 import { 
     AppBar, 
     Box, 
@@ -11,10 +11,13 @@ import {
     MenuItem,
 } from "@mui/material";
 import Link from "next/link";
-import { useAppSelector } from "../../../store/hook";
+import { useAppDispatch, useAppSelector } from "../../../store/hook";
 import { AccountCircle } from "@mui/icons-material";
+import authThunks from "../../../store/thunks/autrhThunks";
 
 const Header: FC = () => {
+
+    const dispatch = useAppDispatch()
 
     const {
         auth,
@@ -31,7 +34,6 @@ const Header: FC = () => {
     const handleClose = () => {
         setAnchorEl(null)
     }
-
 
     return (
         <AppBar position="static">
@@ -89,7 +91,14 @@ const Header: FC = () => {
                                     onClose={handleClose}
                                 >
                                     <MenuItem onClick={handleClose}>Profile</MenuItem>
-                                    <MenuItem onClick={handleClose}>My account</MenuItem>
+                                    <MenuItem 
+                                        onClick={() => {
+                                            dispatch(authThunks.signOut())
+                                            handleClose()
+                                        }}
+                                    >
+                                        Log Out
+                                    </MenuItem>
                                 </Menu>
                             </div>
                         )

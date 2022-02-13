@@ -3,7 +3,7 @@ import {
     Box, Button, Collapse, Grid, IconButton, TextField,
 } from "@mui/material";
 import * as yup from 'yup'
-import { NextPage } from "next";
+import { GetStaticProps, NextPage } from "next";
 import { useFormik } from 'formik'
 import { useAppDispatch, useAppSelector } from "../../store/hook";
 import authThunks from "../../store/thunks/autrhThunks";
@@ -113,6 +113,14 @@ const Login: NextPage = () => {
             </form>
         </Box>
     )
+}
+
+export const getStaticProps: GetStaticProps = async () => {
+    return {
+      props: {
+          nonAuth: true,
+      },
+    }
 }
 
 export default Login
