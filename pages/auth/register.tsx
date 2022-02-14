@@ -3,7 +3,7 @@ import { useFormik } from 'formik'
 import * as yup from 'yup'
 import { Box, Button, Grid, TextField } from "@mui/material";
 import { useAppDispatch } from "../../store/hook";
-import authThunks from "../../store/thunks/autrhThunks";
+import authThunks from "../../features/auth/autrhThunks";
 
 const validationSchema = yup.object({
     email: yup
@@ -22,6 +22,9 @@ const validationSchema = yup.object({
             'Passwords must match', 
             (value, t) => t.parent.password === value,
         ),
+    username: yup
+        .string()
+        .required('Username is required'),
 })
 
 const Register: NextPage = () => {
@@ -32,19 +35,18 @@ const Register: NextPage = () => {
         email: string,
         password: string,
         confirmPassword: string,
+        username: string,
     }>({
         initialValues: {
             email: '',
             password: '',
             confirmPassword: '',
+            username: '',
         },
         validationSchema,
         onSubmit: values => {
             console.log('on submit values', values)
-            dispatch(authThunks.createUser({
-                email: values.email,
-                password: values.password,
-            }))
+            dispatch(authThunks.createUser(values))
         },
         validateOnChange: true,
     })
@@ -64,6 +66,19 @@ const Register: NextPage = () => {
                             onBlur={formik.handleBlur}
                             error={formik.touched.email && Boolean(formik.errors.email)}
                             helperText={formik.touched.email && formik.errors.email}
+                        />
+                    </Grid>
+                    <Grid item>
+                        <TextField 
+                            fullWidth
+                            id="username"
+                            name="username"
+                            label="Username"
+                            value={formik.values.username}
+                            onChange={formik.handleChange}
+                            onBlur={formik.handleBlur}
+                            error={formik.touched.username && Boolean(formik.errors.username)}
+                            helperText={formik.touched.username && formik.errors.username}
                         />
                     </Grid>
                     <Grid item>

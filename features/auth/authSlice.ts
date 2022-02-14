@@ -1,12 +1,8 @@
 import { createSlice, PayloadAction} from '@reduxjs/toolkit'
 import { User } from 'firebase/auth'
 import { auth } from '../../firebase'
-import authThunks from '../thunks/autrhThunks'
-
-interface AuthState {
-    user: null | User,
-    loginError?: string,
-}
+import { AuthState } from './authTypes'
+import authThunks from './autrhThunks'
 
 const initialState: AuthState = {
     user: auth.currentUser,

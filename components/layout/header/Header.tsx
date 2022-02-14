@@ -13,7 +13,7 @@ import {
 import Link from "next/link";
 import { useAppDispatch, useAppSelector } from "../../../store/hook";
 import { AccountCircle } from "@mui/icons-material";
-import authThunks from "../../../store/thunks/autrhThunks";
+import authThunks from "../../../features/auth/autrhThunks";
 
 const Header: FC = () => {
 

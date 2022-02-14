@@ -3,7 +3,7 @@ import { auth, app } from "../../firebase";
 
 import { onAuthStateChanged } from "firebase/auth";
 import { useAppDispatch } from "../../store/hook";
-import { setUser } from "../../store/slices/authSlice";
+import { setUser } from "../../features/auth/authSlice";
 
 const AuthController: FC = () => {
 

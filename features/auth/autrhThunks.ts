@@ -1,17 +1,27 @@
 import { createAsyncThunk } from '@reduxjs/toolkit'
 import { createUserWithEmailAndPassword, UserCredential, signInWithEmailAndPassword, signOut } from 'firebase/auth'
+import { addDoc, doc, setDoc } from 'firebase/firestore'
 
-import { auth } from '../../firebase'
+import { auth, db } from '../../firebase'
+import { usersCollection } from '../../firebase/collections'
+import { ICreateUserThunk } from './authTypes'
 
 const authThunks = {
     createUser: createAsyncThunk(
         'auth/createUser',
         async (
-            {email, password}: {email: string, password: string}
+            user: ICreateUserThunk,
         ) => {
             try {
-                const userCredential: UserCredential = await createUserWithEmailAndPassword(auth, email, password)
+                const userCredential: UserCredential = await createUserWithEmailAndPassword(auth, user.email, user.password)
 
+                await setDoc(doc(db, 'users', userCredential.user.uid), {
+                    email: user.email,
+                    username: user.password,
+                    roles: {
+                        user: true,
+                    }
+                })
                 return userCredential as UserCredential
             } catch (error: any) {
                 console.log('auth create user', error)

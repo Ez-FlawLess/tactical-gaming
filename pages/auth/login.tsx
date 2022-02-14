@@ -6,9 +6,9 @@ import * as yup from 'yup'
 import { GetStaticProps, NextPage } from "next";
 import { useFormik } from 'formik'
 import { useAppDispatch, useAppSelector } from "../../store/hook";
-import authThunks from "../../store/thunks/autrhThunks";
+import authThunks from "../../features/auth/autrhThunks";
 import { Close } from "@mui/icons-material";
-import { deleteLoginError } from "../../store/slices/authSlice";
+import { deleteLoginError } from "../../features/auth/authSlice";
 
 const validationSchema = yup.object({
     email: yup
