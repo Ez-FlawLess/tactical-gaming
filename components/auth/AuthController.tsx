@@ -3,19 +3,21 @@ import { auth, app } from "../../firebase";
 
 import { onAuthStateChanged } from "firebase/auth";
 import { useAppDispatch } from "../../store/hook";
-import { setUser } from "../../features/auth/authSlice";
+import { authActions } from "../../features/auth/authSlice";
+import authThunks from "../../features/auth/autrhThunks";
 
 const AuthController: FC = () => {
 
     const dispatch = useAppDispatch()
 
-    // console.log('app', auth)
-    // console.log('app current user', auth.currentUser)
-    // console.log('app app', app)
-
     useEffect(() => {
         onAuthStateChanged(auth, user => {
-            dispatch(setUser(user))
+            if (user === null) {
+                dispatch(authActions.unsubscribeGetUserRole())
+            } else {
+                dispatch(authThunks.subscribeToGetUserRoles(user.uid))
+            }
+            dispatch(authActions.setUser(user))
         })
     }, [])
 

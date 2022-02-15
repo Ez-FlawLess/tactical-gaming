@@ -1,8 +1,11 @@
-import { User } from "firebase/auth";
+import { Unsubscribe, User } from "firebase/auth";
 
 export interface AuthState {
     user: null | User,
     loginError?: string,
+    roles: IRoles,
+    getUserRolesSubscription?: Unsubscribe,
+
 }
 
 export interface IRoles {

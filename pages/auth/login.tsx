@@ -8,7 +8,7 @@ import { useFormik } from 'formik'
 import { useAppDispatch, useAppSelector } from "../../store/hook";
 import authThunks from "../../features/auth/autrhThunks";
 import { Close } from "@mui/icons-material";
-import { deleteLoginError } from "../../features/auth/authSlice";
+import { authActions } from "../../features/auth/authSlice";
 
 const validationSchema = yup.object({
     email: yup
@@ -64,7 +64,7 @@ const Login: NextPage = () => {
                                             color="inherit"
                                             size="small"
                                             onClick={() => {
-                                                dispatch(deleteLoginError())
+                                                dispatch(authActions.deleteLoginError())
                                             }}
                                         >
                                             <Close fontSize="inherit" />

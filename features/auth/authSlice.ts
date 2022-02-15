@@ -1,11 +1,12 @@
 import { createSlice, PayloadAction} from '@reduxjs/toolkit'
 import { User } from 'firebase/auth'
 import { auth } from '../../firebase'
-import { AuthState } from './authTypes'
+import { AuthState, IRoles } from './authTypes'
 import authThunks from './autrhThunks'
 
 const initialState: AuthState = {
     user: auth.currentUser,
+    roles: {},
 }
 
 export const authSlice = createSlice({
@@ -17,19 +18,27 @@ export const authSlice = createSlice({
         },
         deleteLoginError: (state) => {
             state.loginError = undefined
-        }
+        },
+        setUserRoles: (state, action: PayloadAction<IRoles>) => {
+            state.roles = action.payload
+        },
+        unsubscribeGetUserRole: state => {
+            if (state.getUserRolesSubscription) state.getUserRolesSubscription()
+        },
     },
     extraReducers: builder => {
 
-        // builder.addCase(authThunks.createUser.fulfilled, (state, action) => {
-        //     if (action.payload) {
-        //         state.user = action.payload.user
-        //     }
-        // })
+        builder.addCase(authThunks.createUser.fulfilled, (state, action) => {
+            if (action.payload) {
+                state.roles = {
+                    user: true,
+                }
+            }
+        })
 
-        // builder.addCase(authThunks.signIn.fulfilled, (state, action) => {
-        //     if (action.payload) state.user = action.payload.user
-        // })
+        builder.addCase(authThunks.subscribeToGetUserRoles.fulfilled, (state, action) => {
+            state.getUserRolesSubscription = action.payload
+        })
 
         builder.addCase(authThunks.signIn.rejected, (state, action) => {
             console.log('slice rejected', action)
@@ -38,16 +47,9 @@ export const authSlice = createSlice({
             }
         })
 
-        // builder.addCase(authThunks.signOut.fulfilled, state => {
-        //     state.user = null
-        // })
-
     }
 })
 
-export const {
-    deleteLoginError,
-    setUser,
-} = authSlice.actions
+export const authActions = authSlice.actions
 
 export default authSlice.reducer

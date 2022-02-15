@@ -1,9 +1,9 @@
 import { createAsyncThunk } from '@reduxjs/toolkit'
 import { createUserWithEmailAndPassword, UserCredential, signInWithEmailAndPassword, signOut } from 'firebase/auth'
-import { addDoc, doc, setDoc } from 'firebase/firestore'
+import {  doc, onSnapshot, setDoc } from 'firebase/firestore'
 
 import { auth, db } from '../../firebase'
-import { usersCollection } from '../../firebase/collections'
+import { authActions } from './authSlice'
 import { ICreateUserThunk } from './authTypes'
 
 const authThunks = {
@@ -31,11 +31,11 @@ const authThunks = {
     signIn: createAsyncThunk(
         'auth/signIn',
         async (
-            {email, password}: {email: string, password: string}
+            {email, password}: {email: string, password: string},
         ) => {
             try {
                 const userCredential = await signInWithEmailAndPassword(auth, email, password)
-
+                
                 return userCredential as UserCredential
             } catch (error: any) {
                 console.log('auth login', error)
@@ -66,6 +66,22 @@ const authThunks = {
 
             }
         }
+    ),
+    subscribeToGetUserRoles: createAsyncThunk(
+        'auth/subscribeToGetUserRoles',
+        async (
+            uid: string,
+            {dispatch}
+        ) => {
+            const unSub = onSnapshot(doc(db, 'users', uid), user => {
+                console.log('users snapshot', user.get('roles'))
+                const userRoles = user.get('roles')
+                if (userRoles) {
+                    dispatch(authActions.setUserRoles(userRoles))
+                }
+            })
+            return unSub
+        },
     )
 }
 

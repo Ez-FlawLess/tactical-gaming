@@ -23,6 +23,10 @@ const AuthGuard: FC<{
         }
     }, [pageProps, auth.user])
 
+    useEffect(() => {
+        console.log('roles', auth.roles)
+    }, [auth.roles])
+
     return <>{children}</>
 }
 
