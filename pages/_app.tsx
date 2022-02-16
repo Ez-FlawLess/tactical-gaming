@@ -7,17 +7,29 @@ import { store } from '../store'
 import { app, auth } from '../firebase'
 import AuthController from '../components/auth/AuthController'
 import AuthGuard from '../components/auth/AuthGuard'
+import { NextPage } from 'next'
+import { ReactElement, ReactNode } from 'react'
 
-function MyApp({ Component, pageProps }: AppProps) {
+type NextPageWithLayout = NextPage & {
+  getLayout?: (page: ReactElement) => ReactNode
+}
+
+type AppPropsWithLayout = AppProps & {
+  Component: NextPageWithLayout
+}
+
+function MyApp({ Component, pageProps }: AppPropsWithLayout) {
+
+  console.log(Component.getLayout)
+
+  const getLayout = Component.getLayout ?? (page => <Layout>{page}</Layout>)
 
   return (
     <Provider store={store}>
       <AuthController />
-      <Layout>
-        <AuthGuard pageProps={pageProps}>
-          <Component {...pageProps} />
-        </AuthGuard>
-      </Layout>
+      <AuthGuard pageProps={pageProps}>
+        {getLayout(<Component {...pageProps} />)}
+      </AuthGuard>
     </Provider>
   )
 }

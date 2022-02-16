@@ -16,10 +16,11 @@ const AuthGuard: FC<{
     }))
 
     useEffect(() => {
+        console.log('auth gaurd', auth.user, pageProps)
         if (auth.user) {
             if (pageProps.nonAuth) router.push('/')
         } else {
-            if (pageProps.protected) router.push('/login')
+            if (pageProps.protected) router.push('/auth/login')
         }
     }, [pageProps, auth.user])
 

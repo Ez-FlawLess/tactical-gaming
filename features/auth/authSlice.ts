@@ -42,9 +42,7 @@ export const authSlice = createSlice({
 
         builder.addCase(authThunks.signIn.rejected, (state, action) => {
             console.log('slice rejected', action)
-            if (action.error.message === 'FirebaseError: Firebase: Error (auth/user-not-found).') {
-                state.loginError = 'Email or Password is incorrect'
-            }
+            state.loginError = 'Email or Password is incorrect'
         })
 
     }

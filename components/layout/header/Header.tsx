@@ -90,7 +90,11 @@ const Header: FC = () => {
                                     open={Boolean(anchorEl)}
                                     onClose={handleClose}
                                 >
-                                    <MenuItem onClick={handleClose}>Profile</MenuItem>
+                                    <MenuItem onClick={handleClose}>
+                                        <Link href="/panel">
+                                            Panel
+                                        </Link>
+                                    </MenuItem>
                                     <MenuItem 
                                         onClick={() => {
                                             dispatch(authThunks.signOut())
