@@ -5,7 +5,6 @@ export interface AuthState {
     loginError?: string,
     roles: IRoles,
     getUserRolesSubscription?: Unsubscribe,
-
 }
 
 export interface IRoles {

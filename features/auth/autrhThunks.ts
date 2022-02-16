@@ -1,6 +1,7 @@
 import { createAsyncThunk } from '@reduxjs/toolkit'
+import { FirebaseError } from 'firebase/app'
 import { createUserWithEmailAndPassword, UserCredential, signInWithEmailAndPassword, signOut } from 'firebase/auth'
-import {  doc, onSnapshot, setDoc } from 'firebase/firestore'
+import {  doc, Timestamp, onSnapshot, setDoc } from 'firebase/firestore'
 
 import { auth, db } from '../../firebase'
 import { networkActions } from '../network/networkSlice'
@@ -22,6 +23,7 @@ const authThunks = {
                 await setDoc(doc(db, 'users', userCredential.user.uid), {
                     email: user.email,
                     username: user.password,
+                    timestamp: Timestamp.now(),
                     roles: {
                         user: true,
                     }
