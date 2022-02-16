@@ -3,6 +3,7 @@ import { createUserWithEmailAndPassword, UserCredential, signInWithEmailAndPassw
 import {  doc, onSnapshot, setDoc } from 'firebase/firestore'
 
 import { auth, db } from '../../firebase'
+import { networkActions } from '../network/networkSlice'
 import { authActions } from './authSlice'
 import { ICreateUserThunk } from './authTypes'
 
@@ -11,8 +12,11 @@ const authThunks = {
         'auth/createUser',
         async (
             user: ICreateUserThunk,
+            {dispatch}
         ) => {
             try {
+                dispatch(networkActions.loadingStart())
+
                 const userCredential: UserCredential = await createUserWithEmailAndPassword(auth, user.email, user.password)
 
                 await setDoc(doc(db, 'users', userCredential.user.uid), {
@@ -22,9 +26,12 @@ const authThunks = {
                         user: true,
                     }
                 })
+                
                 return userCredential as UserCredential
             } catch (error: any) {
                 console.log('auth create user', error)
+            } finally {
+                dispatch(networkActions.loadingEnd())
             }
         }
     ),
@@ -32,10 +39,13 @@ const authThunks = {
         'auth/signIn',
         async (
             {email, password}: {email: string, password: string},
+            {dispatch}
         ) => {
             try {
+                dispatch(networkActions.loadingStart())
+
                 const userCredential = await signInWithEmailAndPassword(auth, email, password)
-                
+
                 return userCredential as UserCredential
             } catch (error: any) {
                 console.log('auth login', error)
@@ -43,17 +53,24 @@ const authThunks = {
                     console.log(key, value);
                 }
                 throw new Error(error)
+            } finally {
+                dispatch(networkActions.loadingEnd())
             }
         }
     ),
     signOut: createAsyncThunk(
         'auth/signOut',
-        async () => {
+        async (
+            undefined,
+            {dispatch}
+        ) => {
             try {
+                dispatch(networkActions.loadingStart())
                 await signOut(auth)
                 return true
             } catch (error: any) {
-
+            } finally {
+                dispatch(networkActions.loadingEnd())
             }
         }
     ),
@@ -61,9 +78,8 @@ const authThunks = {
         'auth/getCurrentUserr',
         async () => {
             try {
-                return auth.currentUser
+                return  auth.currentUser
             } catch (error: any) {
-
             }
         }
     ),
