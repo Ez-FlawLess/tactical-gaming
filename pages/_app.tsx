@@ -9,6 +9,7 @@ import AuthController from '../components/auth/AuthController'
 import AuthGuard from '../components/auth/AuthGuard'
 import { NextPage } from 'next'
 import { ReactElement, ReactNode } from 'react'
+import LanguageController from '../components/language/LanguageController'
 
 type NextPageWithLayout = NextPage & {
   getLayout?: (page: ReactElement) => ReactNode
@@ -27,6 +28,7 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout) {
   return (
     <Provider store={store}>
       <AuthController />
+      <LanguageController />
       <AuthGuard pageProps={pageProps}>
         {getLayout(<Component {...pageProps} />)}
       </AuthGuard>
