@@ -1,17 +1,26 @@
-import { Card, CardContent, Grid, Typography } from "@mui/material";
+import { Card, CardContent, Grid, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from "@mui/material";
 import { GetStaticProps, NextPage } from "next";
 import { ReactElement, useEffect } from "react";
 import PanelLayout from "../../components/panel/panelLayout/PanelLayout";
-import { useAppSelector } from "../../store/hook";
+import UsersRow from "../../components/panel/users/UsersRow";
+import { usersActions } from "../../features/users/usersSlice";
+import usersThunk from "../../features/users/usersThunk";
+import { useAppDispatch, useAppSelector } from "../../store/hook";
 
 const Users = () => {
+
+    const dispatch = useAppDispatch()
 
     const { users } = useAppSelector(state => ({
         users: state.users,
     }))
 
     useEffect(() => {
-        
+        console.log('effect called')
+        dispatch(usersThunk.getUsers())
+        return () => {
+            dispatch(usersActions.setUserList([]))
+        }
     }, [])
 
     return (
@@ -40,9 +49,25 @@ const Users = () => {
             </Grid>
             <Grid item xs={12}>
                 <Card>
-                    <CardContent>
-
-                    </CardContent>
+                    <TableContainer component={CardContent}>
+                        <Table>
+                            <TableHead>
+                                <TableRow>
+                                    <TableCell>Username</TableCell>
+                                    <TableCell>Email</TableCell>
+                                    <TableCell>Role</TableCell>
+                                </TableRow>
+                            </TableHead>
+                            <TableBody>
+                                {users.usersList.map(user => (
+                                    <UsersRow 
+                                        key={user.email}
+                                        user={user}
+                                    />
+                                ))}
+                            </TableBody>
+                        </Table>
+                    </TableContainer>
                 </Card>
             </Grid>
         </Grid>

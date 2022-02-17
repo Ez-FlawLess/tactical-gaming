@@ -11,9 +11,7 @@ const networkSlice = createSlice({
     initialState,
     reducers: {
         loadingStart: state => {
-            console.log('1 network state', state.loadingCounter)
             state.loadingCounter++
-            console.log('2 network state', state.loadingCounter)
             if (state.loadingCounter > 0 && state.loading === false) state.loading = true
         },
         loadingEnd: state => {
